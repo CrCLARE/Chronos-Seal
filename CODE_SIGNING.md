@@ -1,51 +1,55 @@
-# 代码签名政策 (Code Signing Policy)
+# Code Signing Policy
 
-本项目（Chronos Seal / CrCLARE 相关工具）采用代码签名机制，以确保分发给用户的二进制文件在构建和分发过程中未被篡改，保障最终用户的系统安全。
+[English](./CODE_SIGNING.md) | [简体中文](/zh/CODE_SIGNING.md)
 
-## 1. 签名范围 (Scope)
+This project (Chronos Seal / CrCLARE related tools) adopts a code signing mechanism to ensure that binary files distributed to users are not tampered with during the build and distribution process, thereby safeguarding the system security of end users.
 
-以下类型的产物将申请并应用代码签名：
-- Windows 平台的图形界面工具（GUI 版 .exe）
-- 预编译的原生扩展模块（如 .node 文件，视工程需要而定）
-- 官方发布的压缩包及其内部的安装程序
+## 1. Scope
 
-**注意：** 本项目不提供任何形式的商业双重授权，所有签名均免费提供给开源社区使用。
+The following types of artifacts will apply for and apply code signing:
+- Windows platform graphical interface tools (GUI version .exe)
+- Precompiled native extension modules (such as .node files, subject to project requirements)
+- Official release archives and their internal installers
 
-## 2. 构建环境与可验证性 (Build Environment & Verifiability)
+**Note:** This project does not provide any form of dual commercial licensing. All signatures are provided free of charge to the open-source community.
 
-- **完全自动化构建：** 所有发布版本均通过 GitHub Actions 进行自动化构建。
-- **源码公开：** 构建产物的所有源代码均完全公开。任何用户都可以通过 GitHub Actions 的构建日志和源码，自行验证最终产物的生成过程。
-- **构建隔离：** 每一次签名请求均基于干净的 CI 环境，无需开发者在本地编译。
-- **不可变提交：** 签名请求仅针对特定的 Git Tag（版本标签）进行，确保签名版本与源码版本严格对应。
+## 2. Build Environment & Verifiability
 
-## 3. 签名审批流程 (Signing Approval Process)
+- **Fully Automated Builds:** All released versions are built automatically via GitHub Actions.
+- **Public Source Code:** All source code for build artifacts is fully public. Any user can verify the generation process of the final artifacts through GitHub Actions build logs and source code.
+- **Isolated Builds:** Every signing request is based on a clean CI environment, requiring no local compilation by developers.
+- **Immutable Commits:** Signing requests are only made for specific Git Tags, ensuring strict correspondence between the signed version and the source code version.
 
-- **人工审批机制：** 每一个生产环境的签名请求，必须由项目维护者（CLARE）进行手动审批，确认无误后方可执行签名。
-- **禁止自动签名：** 为确保安全性，不设置任何自动签名规则（例如基于 commit 的自动触发），避免因凭据泄露导致恶意代码被自动签名。
-- **唯一的发布渠道：** 签名后的二进制文件仅通过官方 GitHub Releases 页面发布。
+## 3. Signing Approval Process
 
-## 4. 证书颁发者 (Certificate Issuer)
+- **Manual Approval Mechanism:** Every production environment signing request must be manually approved by the project maintainer (CLARE) before the signing is executed.
+- **No Automated Signing:** To ensure security, no automated signing rules (e.g., commit-triggered automation) are set up, preventing malicious code from being automatically signed due to credential leakage.
+- **Unique Distribution Channel:** Signed binary files are published exclusively through the official GitHub Releases page.
 
-本项目的代码签名证书由 **SignPath Foundation** 提供。该基金会为符合资质的开源项目提供免费的代码签名证书。
+## 4. Certificate Issuer
 
-*声明：该证书由 SignPath Foundation 颁发，受信任的签名主体为 SignPath Foundation，但明确关联到本开源项目的官方仓库。*
+The code signing certificate for this project is provided by **CrCLARE Studio**.
 
-## 5. 验证签名 (Verifying Signatures)
+*Statement: This certificate is a self-signed certificate generated and maintained by CrCLARE Studio. The trusted signing subject is CrCLARE Studio, but it is explicitly associated with the official repository of this open-source project.*
 
-用户可以通过以下方式验证下载文件的签名状态：
-1. 右键点击可执行文件（.exe），选择“属性”。
-2. 切换到“数字签名”选项卡，确认签名有效。
-3. 高级用户可使用 Windows `signtool` 或 PowerShell 的 `Get-AuthenticodeSignature` 命令进行校验。
+*Certificate Thumbprint (ID):* `24B6F02C01DE207A4AF55AFC8EA61BE3D420B431`
 
-## 6. 安全政策 (Security Policy)
+## 5. Verifying Signatures
 
-如果您发现任何与签名相关的异常、证书泄露或伪造签名的情况，请务必立即通过 `contact@crclare.top` 联系维护者，或提交 GitHub Security Advisories。
-（详细安全政策请参阅 [SECURITY.md](./SECURITY.md)）
+Users can verify the signature status of downloaded files through the following methods:
+1. Right-click the executable file (.exe) and select "Properties".
+2. Switch to the "Digital Signatures" tab and confirm that the signature is valid.
+3. Advanced users can use Windows `signtool` or PowerShell's `Get-AuthenticodeSignature` command for verification.
 
-## 7. 许可证 (License)
+## 6. Security Policy
 
-本项目采用 [MIT 许可证](./LICENSE) 开源协议。任何人都可以在遵守协议的前提下自由使用、修改和分发。
+If you discover any anomalies related to signing, certificate leakage, or forged signatures, please immediately contact the maintainer via `contact@crclare.top`, or submit a GitHub Security Advisory.
+(For detailed security policies, please refer to [SECURITY.md](./SECURITY.md))
+
+## 7. License
+
+This project is open-sourced under the [MIT License](./LICENSE). Anyone can freely use, modify, and distribute it under the terms of the license.
 
 ---
-**维护者：** CLARE (CrCLARE Studio)
-**最后更新：** 2026-09-11
+**Maintainer:** CLARE (CrCLARE Studio)
+**Last Updated:** 2026-09-11
