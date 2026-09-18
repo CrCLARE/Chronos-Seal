@@ -1,6 +1,10 @@
 # Chronos Seal
 
-**时序为封印 · 行为作密钥 · 岁月守护原创**
+**Time as the seal · Action as the key · Time itself guards originality**
+
+---
+
+[English](./README.md) | [简体中文](/zh/README.md)
 
 ---
 
@@ -12,124 +16,113 @@
 
 ---
 
-**适用场景**：定价 ¥12~¥60 的独立游戏，保护首发销售窗口期。
+**Use Case**: Indie games priced between ¥12 and ¥60, protecting the initial sales window.
 
-**核心哲学**：不追求绝对不可破解，而是让破解成本 > 游戏售价，从经济学层面阻止盗版传播。
+**Core Philosophy**: Not pursuing absolute uncrackability, but ensuring the cracking cost > the game's price, economically deterring piracy.
 
-**序言**：该项目完全开源免费（MIT License），欢迎各路 RM 作者直接拿去用，也欢迎各路破解者前来尝试并提交 Issue —— 你破得越深，我补得越快，这套系统就会越强，这也算是我给 RM 圈的一份 Liberty。
+**Preface**: This project is completely open-source and free (MIT License). RM developers are welcome to use it directly, and crackers are also welcome to attempt a crack and submit an Issue — the deeper you dig, the faster I patch, and the stronger this system becomes. Consider this my contribution of "Liberty" to the RM community.
 
+## V2.2 Core Improvements
 
-## V2.2 核心改进
+V2.2 is the **finalized version** of the Basic line. The code logic has been finalized after 13 rounds of revisions. After this update, Basic enters **maintenance mode**. Future focus will shift to the GUI graphical interface and the Pro cloud verification version.
 
-V2.2 是 Basic 线的**定稿版本**。代码逻辑经过 13 轮修订已定型，本次更新后 Basic 进入**维护模式**。未来的重心将转向 GUI 图形化外壳与 Pro 云端验证版。
+- **CSDP Incremental Patch**: Only encrypts modified files. Players only need to download a few MB to complete the update. Solves the historical problem of "downloading several GB for every update" in RM games.
+- **Independent Subkeys per File**: Derives unique keys for each file using the master key + relative file path. A single file key leak does not affect other files.
+- **String Cipher Table**: Key tags no longer exist in plaintext within the binary.
+- **Build Config Header**: Compile-time parameters are passed via generated config file instead of `-D` macros, eliminating command-line escaping issues.
+- **Triple CI Verification**: Artifact existence / no plaintext leakage / key config compiled in. Any failure => Actions turns red directly.
+- **Removed Hard Expiry Check**: The deadline parameter is deprecated; authors only need to fill in the game name and version number.
+- **Lightweight Runtime Detection**: All detection mechanisms produce no behavioral differences, **never mistakenly affecting legitimate players**.
 
-- **CSDP 增量补丁**：只加密改动文件，玩家下载几 MB 即可完成更新。解决 RM 游戏"每次更新下载几个 G"的历史难题。
-- **每文件独立子密钥**：以主密钥 + 文件相对路径派生每个文件的独立密钥。单文件密钥泄露不影响其他文件。
-- **字符串密文表**：关键 tag 不再以明文形式存在于二进制中。
-- **构建配置头文件化**：编译期参数由 `-D` 宏传递改为生成配置文件，消除命令行转义问题。
-- **CI 三重校验**：产物存在性 / 无明文泄漏 / 关键配置已编入。任一失败 → Actions 直接红。
-- **移除硬过期检查**：截止日期参数已废弃，作者只需填写游戏名称与版本号。
-- **运行时检测轻量化**：所有检测机制不产生行为差异，**绝不误伤正版玩家**。
+## MV / MZ Engine Protection Differences
 
+V2.2 provides two routes for the two engine versions, due to objective differences in the underlying environments:
 
-## MV / MZ 引擎防护差异
-
-V2.2 针对两个引擎版本提供两条路线，原因在于底层环境的客观差异：
-
-| 引擎 | 防护路线 | 特征 |
+| Engine | Protection Route | Characteristics |
 |:---|:---|:---|
-| **RPG Maker MV** | 纯 JS 轻量防护 | 基于 Node.js 原生 crypto 模块。零环境依赖，一键加密，100% 兼容。 |
-| **RPG Maker MZ** | C++ N-API 原生加密层 | 解密负载下沉至原生二进制。性能更高、逆向门槛更强。需要云端编译。 |
+| **RPG Maker MV** | Pure JS Lightweight Protection | Based on Node.js native crypto module. Zero environment dependency, one-click encryption, 100% compatibility. |
+| **RPG Maker MZ** | C++ N-API Native Encryption Layer | Decryption payload sinks to native binary. Higher performance, stronger reverse-engineering threshold. Requires cloud compilation. |
 
-选择引擎时请知悉这一差异。MV 不需要云端编译，MZ 需要 GitHub Actions 生成专属 `.node`。
+Please be aware of this difference when choosing your engine. MV does not require cloud compilation; MZ requires GitHub Actions to generate a dedicated `.node`.
 
+## Design Philosophy
 
-## 设计哲理
+Chronos Seal does not pursue absolute uncrackability—that doesn't exist in a client-side environment. It pursues: making the cost of cracking (time, technical threshold, maintenance burden) far exceed the value of the game itself, thereby economically deterring piracy.
 
-Chronos Seal 不追求绝对不可破解——那在客户端环境中不存在。它追求的是：让破解的成本（时间、技术门槛、维护负担）远超游戏本身的价值，从而在经济学层面阻止盗版传播。
+- **Economic Game**: There is no absolute uncrackable local encryption. This solution aims to raise the cracking cost far beyond the game's price, protecting the "golden two weeks" of indie game launches.
+- **Different Seeds**: The master seed of each author is unique. Crackers cannot use a universal tool to crack all games using Chronos Seal—they must reverse-engineer each game individually, which dismantles the feasibility of a "universal unpacking tool" from a cost model perspective.
+- **Zero Trust, Zero Knowledge**: The tool author does not touch or store any user keys.
+- **Fully Reversible**: Only the distribution package is encrypted, with zero modification to project files.
+- **Never Mistakenly Affecting Legitimate Players**: All mechanisms are transparent to legitimate players, producing no risk of misjudgment.
 
-- **经济学博弈**：本地不存在绝对不可破解的加密。本方案旨在将破解成本提升至远超游戏售价，保护独立游戏首发的"黄金两周"。
-- **种子各异**：每个作者的主种子彼此不同。破解者无法用一份通用工具吃掉所有用 Chronos Seal 的游戏——必须逐游戏逆向，这从成本模型上瓦解了"通用解包工具"的可行性。
-- **零信任、零知识**：工具作者不接触、不存储任何用户密钥。
-- **完全可逆**：只加密发行包，工程文件零修改。
-- **绝不误伤正版玩家**：所有机制对正版玩家透明，不产生任何误判风险。
+## Features
 
+- **Native Layer Trust Root**: Core decryption logic resides in the C++ compiled binary (`.node`). No keys in the JS layer; cannot be extracted via F12 console.
+- **Complete Asset Encryption**: Encrypts entire asset files, no longer just the first 16 bytes like RM's built-in encryption.
+- **Independent Subkeys per File**: Derived using master key + relative file path. A single file leak does not affect others.
+- **Runtime Key Derivation**: Master key derived from version number + release date + derivation seed → HMAC-SHA256 chain derivation, stored in no file.
+- **String Cipher Table**: Key tags do not appear in plaintext within the binary.
+- **Asset Format with Magic Number**: File header contains `CHRNSLSE` magic number, allowing the JS layer to quickly determine if a file is encrypted.
+- **HMAC Integrity Verification**: Each encrypted asset comes with an HMAC-SHA256 signature to prevent tampering (constant-time comparison, anti-timing attack).
+- **CSDP Incremental Patch**: Only encrypts modified files; players only need to download a few MB incremental package.
+- **Cloud Compilation**: No local compilation environment needed. [GitHub Actions](https://github.com/CLARE-XHL/Chronos-Builder-Template) generates your dedicated `.node` with one click.
+- **No External Platform Dependency**: Works for Steam games, works for free games.
 
-## 特性
+## Quick Links
 
-- **原生层信任根**：核心解密逻辑在 C++ 编译二进制（`.node`）中，JS 层无密钥，F12 控制台捞不到
-- **素材完整加密**：加密整个素材文件，不再是 RM 自带的仅加密前 16 字节
-- **每文件独立子密钥**：以主密钥 + 文件相对路径派生，单文件泄露不影响其他文件
-- **密钥运行时派生**：主密钥由版本号 + 发行日期 + 派生种子 → HMAC-SHA256 链式派生，不在任何文件中存储
-- **字符串密文表**：关键 tag 不以明文形式出现在二进制中
-- **素材格式带魔数**：文件头包含 `CHRNSLSE` 魔数，JS 层可快速判断是否加密文件
-- **HMAC 完整性校验**：每个加密素材自带 HMAC-SHA256 签名，防止篡改（固定时间比较，防计时攻击）
-- **CSDP 增量补丁**：只加密改动文件，玩家只需下载几 MB 增量包
-- **云端编译**：无需本地编译环境，[GitHub Actions](https://github.com/CLARE-XHL/Chronos-Builder-Template) 一键生成专属 `.node`
-- **不依赖任何外部平台**：Steam 游戏能用，免费游戏也能用
-
-
-## 快速链接
-
-| 链接 | 说明 |
+| Link | Description |
 |:---|:---|
-| [📖 完整文档](https://docs.crclare.top) | VitePress 文档站（推荐先看） |
-| [📦 主仓库](https://github.com/CLARE-XHL/Chronos-Seal) | 源码 & Releases |
-| [☁️ 模板仓库](https://github.com/CLARE-XHL/Chronos-Builder-Template) | 云端编译入口 |
-| [📋 Releases](https://github.com/CLARE-XHL/Chronos-Seal/releases) | 下载最新发行包 |
+| [📖 Full Documentation](https://docs.crclare.top) | VitePress documentation site (recommended to read first) |
+| [📦 Main Repository](https://github.com/CLARE-XHL/Chronos-Seal) | Source code & Releases |
+| [☁️ Template Repository](https://github.com/CLARE-XHL/Chronos-Builder-Template) | Cloud compilation entry |
+| [📋 Releases](https://github.com/CLARE-XHL/Chronos-Seal/releases) | Download the latest distribution package |
 
+## Known Limitations
 
-## 已知边界
+- **The Basic line only provides "initial sales window protection"**, not "permanent uncrackability"—the inherent ceiling of client-side encryption exists.
+- **V2.2 is the endpoint of the Basic line**. Unless security vulnerabilities are found, there will be no V2.3.
+- The author does not promise immediate response, but will pay attention to community feedback.
+- **`encrypt_config.json` and `author_secret.txt` are long-term credentials**. Once lost, the published game can no longer be updated. Please be sure to back them up offline.
 
-- **Basic 线只做"首发销售窗口期防护"**，不追求"永久不可破解"——客户端加密的固有上限就在那里。
-- **V2.2 是 Basic 线的终点**，除非发现安全漏洞，不会有 V2.3。
-- 作者本人不承诺即时响应，但会关注社区反馈。
-- **`encrypt_config.json` 与 `author_secret.txt` 是长期凭证**，丢失后无法再更新已发布的游戏。请务必离线备份。
+## Feedback & Support
 
+This version is a **finalized release without an author's testing environment**. If you encounter issues during use, feedback is welcome:
 
-## 反馈与协助
+- **Submit an Issue**: Please attach engine version, OS, reproduction steps, and error screenshots.
+- **Submit a PR**: **Only bug fixes are accepted**, no new feature requests.
+- **Self-Modification**: The code is completely open; feel free to fork for your own use.
 
-本版本属于**作者无环境下的定稿发布**。如果你在使用中遇到问题，欢迎反馈：
+## License
 
-- **提交 Issue**：请附上引擎版本、操作系统、复现步骤、错误截图。
-- **提交 PR**：**只接受 bug 修复**，不接受功能新增。
-- **自行修改**：代码完全开放，欢迎 fork 自用。
+This project is open-sourced under the MIT License. See the [LICENSE](LICENSE) file for details.
 
+When using this software, please abide by the following conventions:
 
-## 许可证
+- ✅ Allowed: Integrate Chronos Seal into your commercial or free games, sell your game closed-source.
+- ✅ Allowed: Modify the source code for your own projects.
+- ✅ Allowed: Distribute under the terms of the MIT License.
+- ❌ Strictly Prohibited: Selling the source code or compiled artifacts (`.node` files) of Chronos Seal as standalone commercial products.
+- ❌ Strictly Prohibited: Selling the Chronos Seal itself after removing or hiding copyright notices.
 
-本项目采用 MIT 许可证开源，详见 [LICENSE](LICENSE) 文件。
-
-使用本软件时，请遵守以下约定：
-
-- ✅ 允许：将 Chronos Seal 集成到你的商业或免费游戏中，闭源售卖你的游戏
-- ✅ 允许：修改源码用于你自己的项目
-- ✅ 允许：在遵守 MIT 协议的前提下进行分发
-- ❌ 严禁：将 Chronos Seal 的源码或编译产物（`.node` 文件）作为独立商品直接售卖
-- ❌ 严禁：删除或隐藏版权声明后销售 Chronos Seal 本体
-
-**简单来说：你可以卖用了 Chronos Seal 的游戏，但不能直接卖 Chronos Seal 本身。**
+**In simple terms: You can sell games that use Chronos Seal, but you cannot directly sell Chronos Seal itself.**
 
 ---
 
-*本声明是对 MIT 许可证的补充说明，不改变 MIT 许可证的授权条款。*
+*This statement is a supplementary explanation to the MIT License and does not alter the authorization terms of the MIT License.*
 
-
-## 致谢
+## Acknowledgements
 
 - [node-addon-api](https://github.com/nodejs/node-addon-api)
 - [OpenSSL](https://www.openssl.org/)
-- @JiuGeGe520 —— 帮忙发现初期漏洞，推动 V1.1 的 ADS 双存储方案落地
-- Project 1 的 fux2 —— 指出 V1.x 版本的核心误区，促使 V2.0 彻底重构
-- Project 1 的 Singular_Photon —— 指出 RM 原生素材加密的致命漏洞，推动 V2.1 素材解密下沉
+- @JiuGeGe520 —— Helped discover initial vulnerabilities, driving the V1.1 ADS dual-storage solution.
+- fux2 from Project 1 —— Pointed out the core misconception of the V1.x version, prompting a complete refactoring in V2.0.
+- Singular_Photon from Project 1 —— Pointed out the fatal vulnerability in RM's native asset encryption, driving the sinking of asset decryption in V2.1.
 
+## Contact
 
-## 联系方式
+- Author: CLARE-XHL
+- Project URL: [https://github.com/CLARE-XHL/Chronos-Seal](https://github.com/CLARE-XHL/Chronos-Seal)
+- Documentation: [https://docs.crclare.top](https://docs.crclare.top)
+- For code signing policy, see [CODE_SIGNING.md](./CODE_SIGNING.md)
 
-- 作者：CLARE-XHL
-- 项目地址：[https://github.com/CLARE-XHL/Chronos-Seal](https://github.com/CLARE-XHL/Chronos-Seal)
-- 文档站：[https://docs.crclare.top](https://docs.crclare.top)
-- 代码签名政策请见 [CODE_SIGNING.md](./CODE_SIGNING.md)
-
-
-⭐ 如果这个项目对你有帮助，请给主仓库一个 Star！
+⭐ If this project has been helpful to you, please give the main repository a Star!
