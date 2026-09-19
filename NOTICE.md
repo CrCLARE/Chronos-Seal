@@ -1,7 +1,9 @@
-## 使用限制
+# Usage Restrictions
 
-本软件采用 MIT 许可证开源，允许在商业项目中使用。
+[English](./NOTICE.md) | [简体中文](/zh/NOTICE.md)
 
-但以下行为不被允许：
-- 将本软件的源码或编译产物（.node 文件）作为独立商品直接售卖
-- 删除或隐藏版权声明后销售本软件本体
+This software is open-sourced under the MIT License and is allowed to be used in commercial projects.
+
+However, the following actions are not permitted:
+- Selling the source code or compiled artifacts (`.node` files) of this software as standalone commercial products.
+- Selling this software itself after removing or hiding copyright notices.
