@@ -60,8 +60,11 @@ Regular changes such as the JS hijacking layer, documentation, and example scrip
 ## Commit Message Format
 
 Strict formatting is not mandatory, but keeping it clear is recommended:
+
 module: brief description of the changes
+
 Detailed explanation (optional)
+
 Example:decryptor: fix error handling when HMAC verification fails
 
 ## Code of Conduct
