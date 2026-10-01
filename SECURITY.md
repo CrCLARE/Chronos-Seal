@@ -1,87 +1,94 @@
-# 安全策略
+# Security Policy
 
-## 报告安全漏洞
+**Time as the seal · Action as the key · Time itself guards originality**
 
-Chronos Seal 重视每一个安全漏洞的发现和修复。如果你发现了安全漏洞，请按照以下流程报告：
+---
 
-### 报告渠道
+[English](./SECURITY.md) | [简体中文](/zh/SECURITY.md)
 
-**推荐渠道：GitHub Security Advisories**
+---
 
-1. 访问 [https://github.com/CLARE-XHL/Chronos-Seal/security/advisories/new](https://github.com/CLARE-XHL/Chronos-Seal/security/advisories/new)
-2. 点击“Report a vulnerability”
-3. 填写漏洞描述、影响版本、复现步骤等信息
-4. 提交后，我会在看到后的 72 小时内响应并处理
+## Reporting a Vulnerability
 
-**备选渠道：邮箱**
+Chronos Seal takes every security vulnerability seriously. If you discover a security issue, please follow the process below:
 
-如果无法使用 GitHub Security Advisories，也可以通过邮箱联系。
+### Reporting Channels
 
-- **邮箱**：[contact@crclare.top](mailto:contact@crclare.top)
-- **GPG 公钥指纹**：`7360A9A8B36BCA6D73B26D38DC22E64108B24CD3`
-- **公钥获取方式**：
-  - 从公钥服务器导入：`gpg --keyserver keys.openpgp.org --recv-keys 7360A9A8B36BCA6D73B26D38DC22E64108B24CD3`
-  - 或访问 [keys.openpgp.org](https://keys.openpgp.org) 搜索 `contact@crclare.top`
+**Recommended: GitHub Security Advisories**
+1. Visit [https://github.com/CrCLARE/Chronos-Seal/security/advisories/new](https://github.com/CrCLARE/Chronos-Seal/security/advisories/new)
+2. Click "Report a vulnerability"
+3. Fill in the vulnerability description, affected versions, reproduction steps, etc.
+4. I will respond and handle it within **72 hours** of receipt.
 
-建议使用 GPG 加密敏感内容后发送，以确保通信安全。
+**Alternative: Email**
+If GitHub Security Advisories are not accessible, you can also reach out via email.
+- **Email**: [contact@crclare.top](mailto:contact@crclare.top)
+- **GPG Public Key Fingerprint**: `7360A9A8B36BCA6D73B26D38DC22E64108B24CD3`
+- **How to obtain the public key**:
+  - Import from keyserver: `gpg --keyserver keys.openpgp.org --recv-keys 7360A9A8B36BCA6D73B26D38DC22E64108B24CD3`
+  - Or visit [keys.openpgp.org](https://keys.openpgp.org) and search for `contact@crclare.top`
 
-### 报告时应提供的信息
+It is recommended to encrypt sensitive content with GPG before sending to ensure communication security.
 
-为帮助尽快定位和修复问题，建议包含以下内容：
+### Information to Include
 
-- 漏洞的简要描述
-- 影响的版本范围
-- 复现步骤（尽量详细，可附代码或 POC）
-- 漏洞可能造成的影响
-- 你的联系方式（可选）
+To help locate and fix the issue as quickly as possible, please include:
+- A brief description of the vulnerability
+- Affected version range
+- Reproduction steps (as detailed as possible, POC or code attached is welcome)
+- Potential impact
+- Your contact information (optional)
 
-### 处理流程
+### Processing Flow
 
-1. **确认**：收到报告后，我会在收到后的 72 小时内确认漏洞
-2. **评估**：确认漏洞的有效性和影响范围
-3. **修复**：根据漏洞严重程度，制定修复计划
-4. **发布**：修复完成后，会发布新版本并在更新日志中注明
+1. **Acknowledge**: I will confirm the vulnerability within 72 hours of receipt.
+2. **Evaluate**: Assess the validity and impact scope of the vulnerability.
+3. **Fix**: Formulate a fix plan based on severity.
+4. **Publish**: Once fixed, a new version will be released with notes in the changelog.
 
-### 漏洞披露
+### Disclosure Policy
 
-- 修复完成后，会在 GitHub Security Advisories 中公开漏洞详情
-- 如果你希望匿名，请在报告中说明
-- 修复版本发布前，请勿公开披露漏洞细节
+- After the fix is complete, vulnerability details will be disclosed in GitHub Security Advisories.
+- If you wish to remain anonymous, please state so in your report.
+- Please do not publicly disclose vulnerability details before the fixed version is released.
+- For fixed issues, public discussion after release is encouraged to help the community better understand risks and improve overall security awareness.
 
-对于已修复的安全问题，我们鼓励在发布后公开讨论，以帮助社区更好地理解风险并提升整体安全意识。
+### Bug Bounty
 
-### 漏洞赏金
+Chronos Seal is an open-source project and currently does not have a bug bounty program. However, I will acknowledge every security researcher who reports a vulnerability in the changelog. You are also welcome to participate in PR review work.
 
-Chronos Seal 是一个开源项目，目前没有设置漏洞赏金计划。但我会在更新日志中致谢每一位报告漏洞的安全研究员。
+## Defense Strategy
 
-同时，你也可以参与关于PR的审查工作。
+To prevent supply chain poisoning attacks (referencing the XZ Utils backdoor incident), this project implements strict PR review processes for high-risk files. For detailed rules, please refer to [CONTRIBUTING.md](https://github.com/CrCLARE/Chronos-Seal/blob/main/CONTRIBUTING.md).
 
-## 防御策略
+### High-Risk File List
+**Any changes to the following files (including comments, line breaks, punctuation, format adjustments — no exemptions)** will trigger a **48-hour full freeze review period** for the PR:
+- `.github/workflows/build.yml` — CI build pipeline, vcpkg dependencies, compilation environment configuration
+- `binding.gyp` — N-API native module build configuration, link libraries, compilation flags
+- `src/decryptor.cc` — AES-256-CBC core decryption logic, N-API interface, memory handling
+- All Release packaging, artifact upload related scripts/workflows
 
-为防止供应链投毒攻击（参考 XZ Utils 后门事件），本项目对高风险文件实施严格的 PR 审查流程。
-详细规则请参考 [CONTRIBUTING.md](https://github.com/CLARE-XHL/Chronos-Seal/blob/main/CONTRIBUTING.md)。
+### Review Constraints
+1. `force-push` to rewrite PR history is prohibited during the freeze period; a forced push will reset the 48-hour timer.
+2. PRs submitted by the maintainer are equally subject to this rule; **self-merging of high-risk files is prohibited**.
+3. Review is not just reading diff text; it requires local compilation, encryption-decryption round-trip verification, and binary runtime behavior validation.
 
-### 高风险文件清单
-以下文件**任何变更（包含注释、换行、标点、格式调整，不豁免）**，PR 将进入 **48小时全员冻结审查期**：
-- `.github/workflows/build.yml` — CI构建流水线、vcpkg依赖、编译环境配置
-- `binding.gyp` — N‑API原生模块构建配置、链接库、编译标志
-- `src/decryptor.cc` — AES‑256‑CBC核心解密逻辑、N‑API接口、内存处理
-- 所有 Release 打包、产物上传相关脚本/工作流
+> **Regular Changes**: JS hijacking layer, documentation, example scripts, auxiliary tools — these undergo standard PR review and are not subject to the 48-hour freeze constraint.
 
-### 审查约束
-1. 冻结期间禁止 `force‑push` 重写PR历史；发生强制推送则重置48小时计时。
-2. 维护者本人提交的PR同样适用本规则，**禁止自我合并高风险文件**。
-3. 审查不只是阅读diff文本，必须本地编译，执行加密‑解密往返校验，验证二进制运行行为。
+### 🚨 Emergency Break-glass Clause
+Given that the project is in its early stages and the owner (@CLARE-XHL) is currently the sole core maintainer, to avoid the inability to promptly fix catastrophic vulnerabilities:
+1. **Conditions for Activation**: Only activated when a high-risk 0-day vulnerability, supply chain attack, or severe key leak incident occurs.
+2. **Action**: The owner is authorized to initiate an emergency PR and merge it before the 48-hour freeze expires.
+3. **Post-Mortem**: Within 24 hours after the emergency merge, the owner must publish a detailed post-mortem report explaining the reason and content of the emergency merge.
+4. **Daily Limit**: For daily non-emergency submissions, the owner still abides by the 48-hour freeze and must not self-approve.
 
-> 普通变更：JS劫持层、文档、示例脚本、辅助工具，执行常规PR审核，不受48h冻结约束。
+## Security Updates
 
-## 安全更新
+- All security updates will be published on the [Releases](https://github.com/CrCLARE/Chronos-Seal/releases) page.
+- Always use the latest stable version.
+- Security vulnerabilities in older versions may not be fixed; please upgrade promptly.
 
-- 所有安全更新会发布在 [Releases](https://github.com/CLARE-XHL/Chronos-Seal/releases) 页面
-- 建议始终使用最新稳定版本
-- 旧版本的安全漏洞可能不会修复，请及时升级
+## Contact
 
-## 联系方式
-
-- 邮箱：[contact@crclare.top](mailto:contact@crclare.top)
-- GitHub Security Advisories：优先使用
+- Email: [contact@crclare.top](mailto:contact@crclare.top)
+- GitHub Security Advisories: Preferred method.
