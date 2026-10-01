@@ -1,89 +1,83 @@
-# 贡献指南
+# Contributing Guide
 
-感谢你愿意为 Chronos Seal 贡献代码、提交 Issue 或提供反馈。以下是参与本项目的一些基本约定，请在提交 Pull Request 或 Issue 前阅读。
+Thank you for your willingness to contribute code, submit issues, or provide feedback for Chronos Seal. Below are the basic conventions for participating in this project. Please read this before submitting a Pull Request or Issue.
 
-## 提交 Issue
+---
 
-如果你发现了 Bug，或者有功能建议，欢迎提交 Issue。
+[English](./CONTRIBUTING.md) | [简体中文](/zh/CONTRIBUTING.md)
 
-**提交前请先确认：**
+---
 
-1. 搜索已有的 Issue，看看是否有人已经提过
-2. 确认你使用的是最新版本（如果问题在最新版已修复，旧版 Issue 可能不会被处理）
-3. 如果是安全问题，请不要在公开 Issue 中讨论，请参考 [SECURITY.md](SECURITY.md)
+## Submitting an Issue
 
-**Issue 模板：**
+If you find a bug or have a feature suggestion, you are welcome to submit an Issue.
 
-- **版本号**：你使用的 Chronos Seal 版本
-- **环境**：Windows 版本、Node.js 版本（如果适用）
-- **问题描述**：发生了什么，你期望的结果是什么
-- **复现步骤**：如果能提供具体步骤，会更快定位问题
-- **日志/截图**：如果有错误日志或截图，可以附上（注意不要泄露密钥）
+**Before submitting, please confirm:**
 
-## 提交 Pull Request
+1. Search existing Issues to see if someone has already reported it.
+2. Confirm you are using the latest version (if the issue is already fixed in the latest version, old version issues may not be addressed).
+3. If it is a security issue, **do not discuss it in public Issues**. Please refer to [SECURITY.md](../SECURITY.md).
 
-欢迎提交 PR 修复 Bug 或添加新功能。
+**Issue Template:**
 
-**PR 提交前请确认：**
+- **Version**: The Chronos Seal version you are using.
+- **Environment**: Windows version, Node.js version (if applicable).
+- **Description**: What happened, and what was the expected result.
+- **Reproduction Steps**: Specific steps will help locate the issue faster.
+- **Logs/Screenshots**: Attach error logs or screenshots if available (**be careful not to leak keys**).
 
-1. Fork 本仓库，在 `main` 分支上创建新分支进行修改
-2. 代码风格与现有代码保持一致（不需要严格遵守代码规范，但不要乱成一团）
-3. 如果有新增功能，请在 PR 描述中说明用途和使用场景
-4. 如果修复了 Bug，请在 PR 描述中关联对应的 Issue 编号
-5. 提交前确认编译通过（本地或 GitHub Actions 验证）
+## Submitting a Pull Request
 
-**⚠️ 安全审查提示：**
-如果PR改动高风险文件：`.github/workflows/build.yml`、`binding.gyp`、`src/decryptor.cc`、Release打包相关脚本，会执行**48小时全员冻结审查**，即使仅修改注释、标点、换行也不豁免。
+PRs to fix bugs or add new features are welcome.
 
-JS劫持层、文档、示例脚本等普通变更执行常规审核。
+**Before submitting a PR, please confirm:**
 
-**PR 描述建议包含：**
+1. Fork this repository, create a new branch based on `main` for your modifications.
+2. Code style should be consistent with the existing code (no need to strictly follow style guides, but don't make a mess).
+3. If adding a new feature, explain its purpose and use case in the PR description.
+4. If fixing a bug, link the corresponding Issue number in the PR description.
+5. Ensure compilation passes (verified locally or via GitHub Actions) before submission.
 
-- **改动内容**：你改了什么
-- **动机**：为什么要改
-- **测试方式**：你如何验证改动有效
-- **影响范围**：是否会影响已有功能
+**⚠️ Security Review Warning:**
+If a PR modifies high-risk files: `.github/workflows/build.yml`, `binding.gyp`, `src/decryptor.cc`, or Release packaging related scripts, it will trigger a **48-hour full freeze review period**. **This is not exempt even for changes to comments, punctuation, or line breaks.**
 
-## 代码风格
+Regular changes such as the JS hijacking layer, documentation, and example scripts undergo standard review.
 
-- C++ 代码：保持现有风格即可，不需要严格遵循 Google Style 或 LLVM Style
-- JavaScript：同样保持现有风格
-- 注释：尽量用英文，中文也可以接受
-- 不需要过度设计，能解决问题就好
+**Suggested PR Description:**
 
-## 提交消息格式
+- **Changes**: What you changed.
+- **Motivation**: Why you changed it.
+- **Testing Method**: How you verified the changes.
+- **Impact Scope**: Whether existing features are affected.
 
-不强制要求严格的格式，但建议保持清晰：
+## Code Style
 
-```
+- **C++ Code**: Maintain the existing style; no need to strictly follow Google Style or LLVM Style.
+- **JavaScript**: Maintain the existing style as well.
+- **Comments**: English is preferred, but Chinese is also acceptable.
+- **No Over-engineering**: As long as it solves the problem, keep it simple.
 
-模块: 简要描述改动内容
+## Commit Message Format
 
-详细说明（可选）
+Strict formatting is not mandatory, but keeping it clear is recommended:
+module: brief description of the changes
+Detailed explanation (optional)
+Example:decryptor: fix error handling when HMAC verification fails
 
-```
+## Code of Conduct
 
-示例：
-```
+- Respect other contributors. Technical discussions can be intense, but no personal attacks.
+- If you have different opinions on a solution, feel free to propose them, but please provide reasons.
+- Anyone who submits code will be included in the [Contributors List](https://docs.crclare.top/guide/contributors) (unless you wish to remain anonymous).
 
-decryptor: 修复 HMAC 校验失败时的错误处理
+## Reporting Security Vulnerabilities
 
-```
+Please refer to the process in [SECURITY.md](../SECURITY.md).
 
-## 行为准则
+## Need Help?
 
-- 尊重其他贡献者，技术讨论可以激烈，但不要人身攻击
-- 如果对某个方案有不同意见，欢迎提出，但请给出理由
-- 任何提交代码的人，都会被收录到 [贡献者名单](https://docs.crclare.top/guide/contributors) 中（除非你希望匿名）
+- Documentation: [https://docs.crclare.top](https://docs.crclare.top)
+- Main Repository: [https://github.com/CrCLARE/Chronos-Seal](https://github.com/CrCLARE/Chronos-Seal)
+- Email: [contact@crclare.top](mailto:contact@crclare.top)
 
-## 安全漏洞报告
-
-请参考 [SECURITY.md](SECURITY.md) 中的安全漏洞报告流程。
-
-## 需要帮助？
-
-- 文档站：[https://docs.crclare.top](https://docs.crclare.top)
-- 主仓库：[https://github.com/CLARE-XHL/Chronos-Seal](https://github.com/CLARE-XHL/Chronos-Seal)
-- 邮箱：[contact@crclare.top](mailto:contact@crclare.top)
-
-再次感谢你的贡献。
+Thank you again for your contribution.
