@@ -6,6 +6,11 @@ on:
       - main
     paths:
       - 'docs/**'
+  pull_request: # 新增：PR 阶段触发，用于检测死链
+    branches:
+      - main
+    paths:
+      - 'docs/**'
   workflow_dispatch:
 
 permissions:
@@ -14,8 +19,8 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: pages-${{ github.ref }} # 区分 PR 和 main 分支，避免互相取消
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -28,6 +33,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: 'npm'
+          cache-dependency-path: 'docs/package-lock.json' # 开启缓存，大幅提速
 
       - name: Install dependencies
         run: npm install
@@ -37,15 +44,20 @@ jobs:
         run: npm run docs:build
         working-directory: docs
 
+      # 只有非 PR（即 push 到 main 或手动触发）才配置 Pages
       - name: Setup Pages
+        if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v4
 
+      # 只有非 PR 才上传 artifact
       - name: Upload artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs/.vitepress/dist
 
   deploy:
+    if: github.event_name != 'pull_request' # PR 阶段只测，不部署
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
